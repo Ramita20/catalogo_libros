@@ -2,6 +2,7 @@ package com.literalura.catalogo_libros.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,22 +13,29 @@ public class Libro {
     private Long id;
     private String titulo;
 
-    @ManyToMany
-    @JoinTable(
-            name = "autor_libro",
-            joinColumns = @JoinColumn(name = "libro_id"),
-            inverseJoinColumns = @JoinColumn(name = "autor_id")
-    )
-    private List<Autor> autores;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "autor_id")
+    private Autor autor;
 
     private String idioma;
     private Integer cantidadDescargas;
 
-    public Libro(String titulo, List<Autor> autores, String idioma, Integer cantidadDescargas) {
+    public Libro() {
+    }
+
+    public Libro(String titulo, Autor autor, String idioma, Integer cantidadDescargas) {
         this.titulo = titulo;
-        this.autores = autores;
+        this.autor = autor;
         this.idioma = idioma;
         this.cantidadDescargas = cantidadDescargas;
+    }
+
+    @Override
+    public String toString() {
+        return "titulo='" + titulo + '\'' +
+                ", autor=" + autor +
+                ", idioma='" + idioma + '\'' +
+                ", cantidadDescargas=" + cantidadDescargas;
     }
 
     public Long getId() {
@@ -46,12 +54,12 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public List<Autor> getAutores() {
-        return autores;
+    public Autor getAutor() {
+        return autor;
     }
 
-    public void setAutores(List<Autor> autores) {
-        this.autores = autores;
+    public void setAutor(Autor autor) {
+        this.autor = autor;
     }
 
     public String getIdioma() {

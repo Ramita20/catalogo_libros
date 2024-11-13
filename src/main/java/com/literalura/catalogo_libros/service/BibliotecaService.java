@@ -1,40 +1,23 @@
 package com.literalura.catalogo_libros.service;
 
-import com.literalura.catalogo_libros.model.Autor;
-import com.literalura.catalogo_libros.model.DatosLibro;
-import com.literalura.catalogo_libros.model.Libro;
-import jakarta.transaction.Transactional;
+import com.literalura.catalogo_libros.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BibliotecaService {
     @Autowired
-    private LibroService libroService;
+    private AutorService autorService = new AutorService();
 
-    @Autowired
-    private AutorService autorService;
+    public void guardarLibroConAutores(DatosGenerales datosGenerales){
+        DatosLibro datosLibro = datosGenerales.resultados().get(0);
+        DatosAutor datosAutor = datosLibro.autores().get(0);
 
-    @Transactional
-    public void guardarLibroConAutores(DatosLibro datosLibro){
-        List<Autor> autores = datosLibro.autores().stream()
-                .map(a -> new Autor(a.nombre(), a.AnioDeNacimiento(), a.AnioDeMuerte()))
-                .collect(Collectors.toList());
+        Autor autor = new Autor(datosAutor.nombre(), datosAutor.AnioDeNacimiento(), datosAutor.AnioDeMuerte());
+        Libro libro = new Libro(datosLibro.titulo(), autor, datosLibro.idiomas().get(0), datosLibro.cantidadDescargas());
 
-        Libro libro = new Libro(datosLibro.titulo(), autores, datosLibro.idiomas().get(0), datosLibro.cantidadDescargas());
+        autor.getLibros().add(libro);
 
-        autores.forEach(autor -> {
-            if(autor.getLibros() == null){
-                autor.setLibros(List.of(libro));
-            } else {
-                autor.getLibros().add(libro);
-            }
-        });
-
-        autores.forEach(this.autorService::guardarAutor);
-        this.libroService.guardarLibro(libro);
+        this.autorService.guardarAutor(autor);
     }
 }

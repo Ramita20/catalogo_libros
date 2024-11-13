@@ -2,7 +2,7 @@ package com.literalura.catalogo_libros.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,16 +12,26 @@ public class Autor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    private LocalDate AnioDeNacimiento;
-    private LocalDate AnioDeMuerte;
+    private String AnioDeNacimiento;
+    private String AnioDeMuerte;
 
-    @ManyToMany(mappedBy = "autores")
-    private List<Libro> libros;
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Libro> libros = new ArrayList<>();
 
-    public Autor(String nombre, LocalDate anioDeNacimiento, LocalDate anioDeMuerte) {
+    public Autor() {
+    }
+
+    public Autor(String nombre, String anioDeNacimiento, String anioDeMuerte) {
         this.nombre = nombre;
         AnioDeNacimiento = anioDeNacimiento;
         AnioDeMuerte = anioDeMuerte;
+    }
+
+    @Override
+    public String toString() {
+        return "nombre='" + nombre + '\'' +
+                ", AnioDeNacimiento=" + AnioDeNacimiento +
+                ", AnioDeMuerte=" + AnioDeMuerte;
     }
 
     public Long getId() {
@@ -40,19 +50,19 @@ public class Autor {
         this.nombre = nombre;
     }
 
-    public LocalDate getAnioDeNacimiento() {
+    public String getAnioDeNacimiento() {
         return AnioDeNacimiento;
     }
 
-    public void setAnioDeNacimiento(LocalDate anioDeNacimiento) {
+    public void setAnioDeNacimiento(String anioDeNacimiento) {
         AnioDeNacimiento = anioDeNacimiento;
     }
 
-    public LocalDate getAnioDeMuerte() {
+    public String getAnioDeMuerte() {
         return AnioDeMuerte;
     }
 
-    public void setAnioDeMuerte(LocalDate anioDeMuerte) {
+    public void setAnioDeMuerte(String anioDeMuerte) {
         AnioDeMuerte = anioDeMuerte;
     }
 

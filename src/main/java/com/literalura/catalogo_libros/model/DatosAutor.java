@@ -8,6 +8,6 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record DatosAutor(
         @JsonAlias("name") String nombre,
-        @JsonAlias("birth_year") LocalDate AnioDeNacimiento,
-        @JsonAlias("death_year") LocalDate AnioDeMuerte) {
+        @JsonAlias("birth_year") String AnioDeNacimiento,
+        @JsonAlias("death_year") String AnioDeMuerte) {
 }

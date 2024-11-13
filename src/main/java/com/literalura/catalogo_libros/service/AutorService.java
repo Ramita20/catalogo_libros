@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AutorService {
     @Autowired
-    private AutorRepository repositorio;
+    private AutorRepository autorRepository;
 
-    public void guardarAutor(Autor autor){
-        this.repositorio.save(autor);
+    public void guardarAutor(Autor autor) {
+        this.autorRepository.save(autor);
     }
 }

@@ -1,7 +1,6 @@
 package com.literalura.catalogo_libros.principal;
 
 import com.literalura.catalogo_libros.model.DatosGenerales;
-import com.literalura.catalogo_libros.model.DatosLibro;
 import com.literalura.catalogo_libros.service.BibliotecaService;
 import com.literalura.catalogo_libros.service.ConexionAPI;
 import com.literalura.catalogo_libros.service.ConversorJSON;
@@ -58,7 +57,10 @@ public class Principal {
         String json = this.conexion.obtenerDatos(
                 URL + "?search=" + titulo.replace(" ", "+").toLowerCase());
         DatosGenerales datosGenerales = this.conversor.convertirDesdeJSON(json, DatosGenerales.class);
-        DatosLibro datosLibro = datosGenerales.resultados().get(0);
-        this.bibliotecaService.guardarLibroConAutores(datosLibro);
+        if(datosGenerales.resultados().isEmpty()){
+            System.out.println("No se encontró el libro buscado.");
+            return;
+        }
+        this.bibliotecaService.guardarLibroConAutores(datosGenerales);
     }
 }
