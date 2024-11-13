@@ -10,6 +10,10 @@ public class AutorService {
     @Autowired
     private AutorRepository autorRepository;
 
+    public AutorService(AutorRepository autorRepository) {
+        this.autorRepository = autorRepository;
+    }
+
     public void guardarAutor(Autor autor) {
         this.autorRepository.save(autor);
     }

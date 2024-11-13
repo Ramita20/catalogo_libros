@@ -1,6 +1,7 @@
 package com.literalura.catalogo_libros.principal;
 
 import com.literalura.catalogo_libros.model.DatosGenerales;
+import com.literalura.catalogo_libros.repository.AutorRepository;
 import com.literalura.catalogo_libros.service.BibliotecaService;
 import com.literalura.catalogo_libros.service.ConexionAPI;
 import com.literalura.catalogo_libros.service.ConversorJSON;
@@ -12,8 +13,12 @@ public class Principal {
     private Scanner teclado = new Scanner(System.in);
     ConexionAPI conexion = new ConexionAPI();
     ConversorJSON conversor = new ConversorJSON();
-    private BibliotecaService bibliotecaService = new BibliotecaService();
+    private BibliotecaService bibliotecaService;
     private Integer opcion;
+
+    public Principal(AutorRepository autorRepository) {
+        this.bibliotecaService = new BibliotecaService(autorRepository);
+    }
 
     public void mostrarMenu(){
         System.out.println("\n¡BIENVENIDO A LITER ALURA!");
