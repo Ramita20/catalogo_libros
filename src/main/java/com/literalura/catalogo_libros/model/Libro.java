@@ -13,7 +13,7 @@ public class Libro {
     private Long id;
     private String titulo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "autor_id")
     private Autor autor;
 

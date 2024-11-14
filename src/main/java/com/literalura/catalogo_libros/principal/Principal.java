@@ -1,11 +1,15 @@
 package com.literalura.catalogo_libros.principal;
 
+import com.literalura.catalogo_libros.dto.AutorDTO;
+import com.literalura.catalogo_libros.dto.LibroDTO;
 import com.literalura.catalogo_libros.model.DatosGenerales;
 import com.literalura.catalogo_libros.repository.AutorRepository;
+import com.literalura.catalogo_libros.repository.LibroRepository;
 import com.literalura.catalogo_libros.service.BibliotecaService;
 import com.literalura.catalogo_libros.service.ConexionAPI;
 import com.literalura.catalogo_libros.service.ConversorJSON;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Principal {
@@ -16,8 +20,8 @@ public class Principal {
     private BibliotecaService bibliotecaService;
     private Integer opcion;
 
-    public Principal(AutorRepository autorRepository) {
-        this.bibliotecaService = new BibliotecaService(autorRepository);
+    public Principal(AutorRepository autorRepository, LibroRepository libroRepository) {
+        this.bibliotecaService = new BibliotecaService(autorRepository, libroRepository);
     }
 
     public void mostrarMenu(){
@@ -43,13 +47,28 @@ public class Principal {
                     this.buscarLibroPorTitulo();
                     break;
                 }
+                case 2:{
+                    this.listarLibrosRegistrados();
+                    break;
+                }
+                case 3:{
+                    this.listarAutoresRegistrados();
+                    break;
+                }
+                case 4:{
+                    this.listarAutoresVivosPorAnio();
+                    break;
+                }
+                case 5:{
+                    this.listarLibrosPorIdioma();
+                    break;
+                }
                 case 0:{
                     System.out.println("Finalizando programa...");
                     break;
                 }
                 default:{
                     System.out.println("¡Opción inválida!");
-                    continue;
                 }
             }
         } while (this.opcion != 0);
@@ -67,5 +86,37 @@ public class Principal {
             return;
         }
         this.bibliotecaService.guardarLibroConAutores(datosGenerales);
+    }
+
+    private void listarLibrosRegistrados() {
+        List<LibroDTO> libros = this.bibliotecaService.librosRegistrados();
+        libros.forEach(System.out::println);
+    }
+
+    private void listarAutoresRegistrados() {
+        List<AutorDTO> autores = this.bibliotecaService.autoresRegistrados();
+        autores.forEach(System.out::println);
+    }
+
+    private void listarAutoresVivosPorAnio() {
+        System.out.println("Ingrese el año deseado:");
+        String anio = this.teclado.nextLine();
+        List<AutorDTO> autores = this.bibliotecaService.autoresVivosPorAnio(anio);
+        autores.forEach(System.out::println);
+    }
+
+    private void listarLibrosPorIdioma() {
+        System.out.println("""
+                
+                Ejemplos:
+                Inglés - en
+                Español - en
+                Frances - fr
+                
+                Ingrese el idioma deseado:
+                """);
+        String idioma = this.teclado.nextLine();
+        List<LibroDTO> libros = this.bibliotecaService.librosPorIdioma(idioma);
+        libros.forEach(System.out::println);
     }
 }
